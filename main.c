@@ -5,6 +5,7 @@
 #define GREEN_LED (1<<3)
 
 #define SW1 (1<<4)
+#define CUSTOM_GPIO_PORTF_DATA_R (*((volatile uint32_t *)0x4002507C))
 int main()
 {
     SYSCTL_RCGC2_R |= 0x00000020;//Enable GPIO
@@ -19,16 +20,18 @@ int main()
 
    GPIO_PORTF_DATA_R = 0x00;
 
+   CUSTOM_GPIO_PORTF_DATA_R &= ~(0x0E)
+
    while(1)
    {
-       if((GPIO_PORTF_DATA_R & SW1) == 0)
+       if((CUSTOM_GPIO_PORTF_DATA_R & SW1) == 0)
        {
-           GPIO_PORTF_DATA_R |= RED_LED;
+           CUSTOM_GPIO_PORTF_DATA_R |= RED_LED;
 
        }
        else
        {
-           GPIO_PORTF_DATA_R &= ~(RED_LED);
+           CUSTOM_GPIO_PORTF_DATA_R &= ~(RED_LED);
        }
    }
 
